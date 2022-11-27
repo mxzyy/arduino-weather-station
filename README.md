@@ -1,2 +1,2 @@
 # arduino-weather-station
-Statiun Cuaca Arduino 
+Statiun Cuaca Arduino - ESP8266 
