@@ -1,3 +1,5 @@
+
+
 //  __    __           _   _                 __           _                     
 // / / /\ \ \___  __ _| |_| |__   ___ _ __  / _\_   _ ___| |_ ___ _ __ ___  ___ 
 // \ \/  \/ / _ \/ _` | __| '_ \ / _ \ '__| \ \| | | / __| __/ _ \ '_ ` _ \/ __|
@@ -22,7 +24,7 @@ char auth[] = "qf8uk1uT6tmvodHSD5H_fh6GNPOdf7fH";
 char ssid[] = "andaikan";
 char pass[] = "12345678";
  
-#define DHTPIN 5          // D3
+#define DHTPIN 12          // D3
  
 // Uncomment whatever type you're using!
 //#define DHTTYPE DHT11     // DHT 11
@@ -31,8 +33,12 @@ char pass[] = "12345678";
  
 DHT dht(DHTPIN, DHTTYPE);
 BlynkTimer timer;
- 
+#include <LiquidCrystal_I2C.h>
 
+// set the LCD number of columns and rows
+int lcdColumns = 16;
+int lcdRows = 2; 
+LiquidCrystal_I2C lcd(0x3F, lcdColumns, lcdRows);  
 void sendSensor()
 {
   float h = dht.readHumidity();
@@ -57,7 +63,8 @@ void setup()
   
  
   dht.begin();
- 
+  lcd.init();
+  lcd.backlight();
 
   timer.setInterval(1000L, sendSensor);
 }
@@ -66,4 +73,17 @@ void loop()
 {
   Blynk.run();
   timer.run();
+  float t = dht.readTemperature();
+  float h = dht.readHumidity();
+  Serial.print("Temp : ");
+  Serial.print(t);
+  Serial.println(" ");
+  lcd.setCursor(0,0);
+  lcd.print("SUHU : ");
+  lcd.print(t);
+  lcd.print(" C");
+  lcd.setCursor(0,1);
+  lcd.print("LEMBAB : ");
+  lcd.print(h);
+  lcd.print(" %");
 }
